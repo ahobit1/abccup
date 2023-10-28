@@ -205,7 +205,7 @@
       scaffolding.height = 640;
       scaffolding.resizeMode = "stretch";
       scaffolding.editableLists = false;
-      scaffolding.usePackagedRuntime = false;
+      scaffolding.usePackagedRuntime = true;
       scaffolding.setup();
       scaffolding.appendTo(appElement);
 
@@ -224,10 +224,11 @@
       scaffolding.setAccentColor("#ff4c4c");
 
       {const providers = {};
-providers.ws = new Scaffolding.Cloud.WebSocketProvider(["wss://clouddata.turbowarp.org","wss://clouddata.turbowarp.xyz"], "p4-@ABC Cup.sb3");
+providers.local = new Scaffolding.Cloud.LocalStorageProvider("cloudvariables:p4-@ABC Cup - Kopya.sb3");
+providers.ws = new Scaffolding.Cloud.WebSocketProvider(["wss://clouddata.turbowarp.org","wss://clouddata.turbowarp.xyz"], "p4-@ABC Cup - Kopya.sb3");
 for (const provider of Object.values(providers)) scaffolding.addCloudProvider(provider);
+scaffolding.addCloudProviderOverride("☁ Oy Hakkı", providers["local"] || null);
 scaffolding.addCloudProviderOverride("☁ open link", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ Oy Hakkı", providers["ws"] || null);
 scaffolding.addCloudProviderOverride("☁ T1", providers["ws"] || null);
 scaffolding.addCloudProviderOverride("☁ T2", providers["ws"] || null);
 scaffolding.addCloudProviderOverride("☁ T3", providers["ws"] || null);
@@ -249,7 +250,7 @@ scaffolding.addCloudProviderOverride("☁ T17", providers["ws"] || null);
 
       vm.setTurboMode(false);
       if (vm.setInterpolation) vm.setInterpolation(false);
-      if (vm.setFramerate) vm.setFramerate(30);
+      if (vm.setFramerate) vm.setFramerate(60);
       if (vm.renderer.setUseHighQualityRender) vm.renderer.setUseHighQualityRender(false);
       if (vm.setRuntimeOptions) vm.setRuntimeOptions({
         fencing: true,
@@ -257,7 +258,7 @@ scaffolding.addCloudProviderOverride("☁ T17", providers["ws"] || null);
         maxClones: 300,
       });
       if (vm.setCompilerOptions) vm.setCompilerOptions({
-        enabled: false,
+        enabled: true,
         warpTimer: false
       });
       if (vm.renderer.setMaxTextureDimension) vm.renderer.setMaxTextureDimension(2048);
@@ -270,7 +271,7 @@ scaffolding.addCloudProviderOverride("☁ T17", providers["ws"] || null);
         getSandboxMode: () => 'unsandboxed',
         canLoadExtensionFromProject: () => true
       });
-      for (const extension of []) {
+      for (const extension of ["data:text/javascript;,(function(Scratch)%20%7B%20%2F%2F%20Name%3A%20Notifications%0A%2F%2F%20ID%3A%20mdwaltersnotifications%0A%2F%2F%20Description%3A%20Display%20notifications.%0A%0A(function%20(Scratch)%20%7B%0A%20%20%22use%20strict%22%3B%0A%0A%20%20let%20denied%20%3D%20false%3B%0A%20%20%2F**%20%40type%20%7BNotification%7Cnull%7D%20*%2F%0A%20%20let%20notification%20%3D%20null%3B%0A%0A%20%20const%20askForNotificationPermission%20%3D%20async%20()%20%3D%3E%20%7B%0A%20%20%20%20try%20%7B%0A%20%20%20%20%20%20const%20allowedByVM%20%3D%20await%20Scratch.canNotify()%3B%0A%20%20%20%20%20%20if%20(!allowedByVM)%20%7B%0A%20%20%20%20%20%20%20%20throw%20new%20Error(%22Denied%20by%20VM%22)%3B%0A%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20const%20allowedByBrowser%20%3D%20await%20Notification.requestPermission()%3B%0A%20%20%20%20%20%20if%20(!allowedByBrowser)%20%7B%0A%20%20%20%20%20%20%20%20throw%20new%20Error(%22Denied%20by%20browser%22)%3B%0A%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20denied%20%3D%20false%3B%0A%20%20%20%20%20%20return%20true%3B%0A%20%20%20%20%7D%20catch%20(e)%20%7B%0A%20%20%20%20%20%20denied%20%3D%20true%3B%0A%20%20%20%20%20%20console.warn(%22Could%20not%20request%20notification%20permissions%22%2C%20e)%3B%0A%20%20%20%20%20%20return%20false%3B%0A%20%20%20%20%7D%0A%20%20%7D%3B%0A%0A%20%20const%20isAndroid%20%3D%20()%20%3D%3E%20navigator.userAgent.includes(%22Android%22)%3B%0A%0A%20%20const%20getServiceWorkerRegistration%20%3D%20()%20%3D%3E%20%7B%0A%20%20%20%20if%20(!(%22serviceWorker%22%20in%20navigator))%20return%20null%3B%0A%20%20%20%20%2F%2F%20This%20is%20only%20needed%20on%20Android%0A%20%20%20%20if%20(!isAndroid())%20return%20null%3B%0A%20%20%20%20return%20navigator.serviceWorker.getRegistration()%3B%0A%20%20%7D%3B%0A%0A%20%20class%20Notifications%20%7B%0A%20%20%20%20constructor()%20%7B%0A%20%20%20%20%20%20Scratch.vm.runtime.on(%22RUNTIME_DISPOSED%22%2C%20()%20%3D%3E%20%7B%0A%20%20%20%20%20%20%20%20this._closeNotification()%3B%0A%20%20%20%20%20%20%7D)%3B%0A%20%20%20%20%7D%0A%20%20%20%20getInfo()%20%7B%0A%20%20%20%20%20%20return%20%7B%0A%20%20%20%20%20%20%20%20id%3A%20%22mdwaltersnotifications%22%2C%0A%20%20%20%20%20%20%20%20name%3A%20%22Notifications%22%2C%0A%20%20%20%20%20%20%20%20blocks%3A%20%5B%0A%20%20%20%20%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20opcode%3A%20%22requestPermission%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20blockType%3A%20Scratch.BlockType.COMMAND%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20text%3A%20%22request%20notification%20permission%22%2C%0A%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20opcode%3A%20%22hasPermission%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20blockType%3A%20Scratch.BlockType.BOOLEAN%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20text%3A%20%22has%20notification%20permission%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20disableMonitor%3A%20true%2C%0A%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20opcode%3A%20%22showNotification%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20blockType%3A%20Scratch.BlockType.COMMAND%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20text%3A%20%22create%20notification%20with%20text%20%5Btext%5D%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20arguments%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20text%3A%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20type%3A%20Scratch.ArgumentType.STRING%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20defaultValue%3A%20%22Hello%2C%20world!%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%20%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20opcode%3A%20%22closeNotification%22%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20blockType%3A%20Scratch.BlockType.COMMAND%2C%0A%20%20%20%20%20%20%20%20%20%20%20%20text%3A%20%22close%20notification%22%2C%0A%20%20%20%20%20%20%20%20%20%20%7D%2C%0A%20%20%20%20%20%20%20%20%5D%2C%0A%20%20%20%20%20%20%7D%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20requestPermission()%20%7B%0A%20%20%20%20%20%20return%20askForNotificationPermission()%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20hasPermission()%20%7B%0A%20%20%20%20%20%20if%20(denied)%20%7B%0A%20%20%20%20%20%20%20%20return%20false%3B%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20return%20askForNotificationPermission()%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20async%20_showNotification(text)%20%7B%0A%20%20%20%20%20%20if%20(await%20this.hasPermission())%20%7B%0A%20%20%20%20%20%20%20%20const%20title%20%3D%20%22Notification%20from%20project%22%3B%0A%20%20%20%20%20%20%20%20const%20options%20%3D%20%7B%0A%20%20%20%20%20%20%20%20%20%20body%3A%20text%2C%0A%20%20%20%20%20%20%20%20%7D%3B%0A%20%20%20%20%20%20%20%20try%20%7B%0A%20%20%20%20%20%20%20%20%20%20notification%20%3D%20new%20Notification(title%2C%20options)%3B%0A%20%20%20%20%20%20%20%20%7D%20catch%20(e)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%2F%2F%20On%20Android%20we%20need%20to%20go%20through%20the%20service%20worker.%0A%20%20%20%20%20%20%20%20%20%20const%20registration%20%3D%20await%20getServiceWorkerRegistration()%3B%0A%20%20%20%20%20%20%20%20%20%20if%20(registration)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20try%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20await%20registration.showNotification(title%2C%20options)%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%20catch%20(e2)%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20%20%20console.error(%22Could%20not%20show%20notification%22%2C%20e%2C%20e2)%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%20%20%7D%20else%20%7B%0A%20%20%20%20%20%20%20%20%20%20%20%20console.error(%22Could%20not%20show%20notification%22%2C%20e)%3B%0A%20%20%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%0A%20%20%20%20showNotification(args)%20%7B%0A%20%20%20%20%20%20this._showNotification(Scratch.Cast.toString(args.text))%3B%0A%20%20%20%20%7D%0A%0A%20%20%20%20async%20_closeNotification()%20%7B%0A%20%20%20%20%20%20if%20(notification)%20%7B%0A%20%20%20%20%20%20%20%20notification.close()%3B%0A%20%20%20%20%20%20%20%20notification%20%3D%20null%3B%0A%20%20%20%20%20%20%7D%0A%0A%20%20%20%20%20%20const%20registration%20%3D%20await%20getServiceWorkerRegistration()%3B%0A%20%20%20%20%20%20if%20(registration)%20%7B%0A%20%20%20%20%20%20%20%20const%20notifications%20%3D%20await%20registration.getNotifications()%3B%0A%20%20%20%20%20%20%20%20for%20(const%20notification%20of%20notifications)%20%7B%0A%20%20%20%20%20%20%20%20%20%20notification.close()%3B%0A%20%20%20%20%20%20%20%20%7D%0A%20%20%20%20%20%20%7D%0A%20%20%20%20%7D%0A%0A%20%20%20%20closeNotification()%20%7B%0A%20%20%20%20%20%20this._closeNotification()%3B%0A%20%20%20%20%7D%0A%20%20%7D%0A%0A%20%20Scratch.extensions.register(new%20Notifications())%3B%0A%7D)(Scratch)%3B%0A%20%7D)(Scratch)%3B"]) {
         vm.extensionManager.loadExtensionURL(extension);
       }
 
