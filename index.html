@@ -224,28 +224,9 @@
       scaffolding.setAccentColor("#ff4c4c");
 
       {const providers = {};
-providers.local = new Scaffolding.Cloud.LocalStorageProvider("cloudvariables:p4-@ABC Cup - Kopya.sb3");
 providers.ws = new Scaffolding.Cloud.WebSocketProvider(["wss://clouddata.turbowarp.org","wss://clouddata.turbowarp.xyz"], "p4-@ABC Cup - Kopya.sb3");
 for (const provider of Object.values(providers)) scaffolding.addCloudProvider(provider);
-scaffolding.addCloudProviderOverride("☁ Oy Hakkı", providers["local"] || null);
 scaffolding.addCloudProviderOverride("☁ open link", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ T1", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ T2", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ T3", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ T4", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ T5", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ T7", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ T6", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ T8", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ T9", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ T10", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ T11", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ T12", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ T13", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ T14", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ T15", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ T16", providers["ws"] || null);
-scaffolding.addCloudProviderOverride("☁ T17", providers["ws"] || null);
 };
 
       vm.setTurboMode(false);
